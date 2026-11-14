@@ -26,13 +26,16 @@ flutter pub get
 flutter analyze --no-fatal-infos
 flutter test --reporter expanded
 dart setup.dart macos --env stable
-# Windows 主机：dart setup.dart windows --env stable
+# Windows 主机：dart setup.dart windows --env stable --targets zip
 ```
 
 发行工具链沿用上游 CI 的 Flutter `3.44.4`、Go `1.26.4`。
 macOS 使用 Xcode `26.3` 构建，运行系统下限由上游平台配置决定。
 Windows CI 优先使用 Visual Studio 2026。构建成功与真实 VPN/Windows 10 实机验收分别记录在
 [Issue #1](https://github.com/othercat/FlClash/issues/1)；未执行的验证不代表通过。
+
+Windows 使用完整的免安装 ZIP。解压到固定目录后运行其中的 `FlClash.exe`，
+保持同目录的 DLL、内核和 TUN 服务组件完整；首次开启 TUN 时按应用提示完成系统授权。
 
 此前未完成的调查与脚本保存在
 [`archive/20261114-unfinished-customization`](https://github.com/othercat/FlClash/tree/archive/20261114-unfinished-customization)。

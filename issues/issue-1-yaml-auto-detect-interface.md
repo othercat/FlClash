@@ -51,6 +51,12 @@ before the fix), all 424 repository tests pass, and
 `flutter analyze --no-fatal-infos` exits successfully with only existing
 informational deprecation notices. The dependency lock is unchanged.
 
-Builds: not yet run.
+Builds: [first CI run](https://github.com/othercat/FlClash/actions/runs/43581443337)
+passed analysis and all tests on both operating systems. The macOS arm64 DMG was
+generated successfully. Windows native compilation succeeded, then Inno Setup
+failed at the installer icon path. Deliver the upstream-supported complete ZIP
+bundle for Windows; it includes the application, core, libraries and TUN helper.
+The optional installer failure is retained in local evidence; no installer is
+claimed as delivered. ZIP packaging rerun pending.
 Runtime acceptance: pending custom build.
 Issue state: open.

@@ -81,7 +81,7 @@ jobs:
         run: flutter test --reporter expanded
 
       - name: Package
-        run: dart setup.dart ${{ matrix.platform }} --env stable
+        run: dart setup.dart ${{ matrix.platform }} --env stable ${{ matrix.platform == 'windows' && '--targets zip' || '' }}
 
       - name: Identify custom artifacts
         shell: pwsh
