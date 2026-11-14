@@ -2,6 +2,86 @@
 
 [GitHub #1](https://github.com/othercat/FlClash/issues/1)
 
+## Native regression: full TUN loses connectivity
+
+The user installed build `2026111401` and completed native authorization, then
+reported that enabling TUN broke networking across browsers, WeChat and QQ.
+They disabled TUN to recover. This supersedes the pending-installation status
+below; native acceptance has failed and this issue remains open.
+
+The profile now correctly applies `auto-detect-interface: false`, but desktop
+FlClash keeps `auto-route: true`. Without an explicit outbound interface this
+allows outbound sockets to enter the full TUN again. A bounded native trial
+with automatic rollback enabled TUN and automatic interface detection: direct
+TUN and explicit-proxy gstatic requests both returned HTTP 204. The trial
+restored the original disabled TUN state. Evidence is local-only:
+`process-root/artifacts/FlClash-issue-1/tun-auto-detect-recovery-trial.json`.
+
+Follow-up branch: `richardli/fix/1-tun-routing-coexistence`, from freshly fetched
+`main` at `aa8728dd4fa6d5898e940088aa059c83c3fb2c45`. Preserve the upstream TUN
+loop guard and YAML flag semantics. Resolve outbound interfaces using the OS
+route for the destination, so dynamically installed VPN routes can win over
+the default physical interface. Keep the pinned core submodule unchanged.
+Test real full TUN, reload/toggle behavior, and VPN access; successful builds
+alone are insufficient. Windows physical acceptance remains outstanding.
+The user explicitly deferred the remote Syncthing 5060 pending-item status.
+
+Follow-up implementation: install a destination-route-aware interface inventory
+once at desktop core initialization, beneath the existing TUN listener lifecycle.
+macOS uses bounded RTM_GET requests with unique sequences; Windows uses
+GetBestInterfaceEx. Leave unspecified/local addresses and lookup failures to the
+upstream inventory, and return the application's own TUN unchanged so the existing
+detector rejects it. No custom VPN names, routes or credentials enter the product.
+The YAML flag and explicit outbound interfaces retain their semantics.
+
+Local validation for build `2026111402`: native route tests, including concurrent
+lookups and live macOS loopback lookup, pass; the complete desktop core builds
+with Go 1.26.4 and `CGO_ENABLED=0`. Flutter 3.44.4 analysis succeeds with the same
+10 existing informational notices, and all 424 Flutter tests pass. Exclude the
+ignored process/delivery artifact roots from Dart analysis: downloaded diagnostic
+packager source under process-root otherwise generates unrelated analysis errors.
+The core submodule, Go module/sum and Flutter lock remain unchanged.
+
+Toolchain note: the runtime-assistant's all-module offline preparation rejected
+the upstream graph for an unused missing checksum. Its verified Go 1.26.4 runtime
+was selected separately, and actual package tests/core compilation ran against
+the existing module cache with `-mod=readonly`; no dependency lock was changed.
+Personal YAML, its imported profile and generated runtime were backed up, then
+only `auto-detect-interface` was changed to `true`. TUN remains disabled pending
+the corrected native build and VPN acceptance.
+
+Follow-up implementation commit: `0264233c5798c8484ff90e99d89a44a966f11695`.
+[Second-version CI](https://github.com/othercat/FlClash/actions/runs/43599325098)
+passed analysis, all Flutter tests, native route tests and packaging on both
+macOS arm64 and Windows x64. The downloaded artifact digests and packaged
+checksum manifests match. Version is `0.8.94+2026111402` / `othercat-yaml2`.
+
+- Mac DMG: `0372208ddcfc28cde15f2f19f26609d0424abf1ce0b0cef055936a7b430b4fe1`.
+  Extracted app signature verified; the core is arm64 and has SHA-256
+  `a982cf904fc0d68721ac2fcaf9c441d413eed2463b35cf97f091d64b200e4227`.
+- Windows ZIP: `eb1fdcc12b1f10a59f7dd5cb1e17f40ed19039f9ecab8bc6ef10e1f1c5c22044`.
+  All 72 entries pass CRC; application, core and helper service are x64, and
+  the Flutter DLL is included. Windows 10 physical testing remains unperformed.
+
+The user renewed aTrust login. Its corporate route now uses a separate adapter.
+A local isolated integration test, compiled against the unchanged upstream TUN
+detector and the new route finder, ran under a live full TUN: public destinations
+were rejected as own-TUN and fell back to the physical interface; the corporate
+destination selected the VPN and actual mihomo outbound dialing returned HTTPS
+200. Native TUN and explicit-proxy external requests returned 204. TUN was then
+restored off by the bounded trial. Local-only evidence:
+`process-root/artifacts/FlClash-issue-1/native-full-tun-vpn-route-yaml2.json`
+and its companion log. This tests real route/dialer behavior, not an installed
+second-version application, whose native acceptance remains pending.
+
+Local deliveries are in `delivery-root/artifacts/FlClash-issue-1/macos-yaml2/`
+and `windows-yaml2/`. The second offline installer and previous-app restore
+entry passed zsh syntax checks; installer check mode verifies the actual build,
+app/core hashes and signature. The original installer is retained with a
+`.disabled-` suffix to avoid reinstalling the failed first candidate. Old packages,
+backups and the original-version restore entry remain available. No second app
+replacement has been performed yet.
+
 ## Scope
 
 Start from official `v0.8.94`, commit `7e7f1f89f363c31bbb7aa5af3f34a8b5c32a7a19`.
