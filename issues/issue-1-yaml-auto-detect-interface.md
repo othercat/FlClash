@@ -50,6 +50,38 @@ Personal YAML, its imported profile and generated runtime were backed up, then
 only `auto-detect-interface` was changed to `true`. TUN remains disabled pending
 the corrected native build and VPN acceptance.
 
+Follow-up implementation commit: `0264233c5798c8484ff90e99d89a44a966f11695`.
+[Second-version CI](https://github.com/othercat/FlClash/actions/runs/43599325098)
+passed analysis, all Flutter tests, native route tests and packaging on both
+macOS arm64 and Windows x64. The downloaded artifact digests and packaged
+checksum manifests match. Version is `0.8.94+2026111402` / `othercat-yaml2`.
+
+- Mac DMG: `0372208ddcfc28cde15f2f19f26609d0424abf1ce0b0cef055936a7b430b4fe1`.
+  Extracted app signature verified; the core is arm64 and has SHA-256
+  `a982cf904fc0d68721ac2fcaf9c441d413eed2463b35cf97f091d64b200e4227`.
+- Windows ZIP: `eb1fdcc12b1f10a59f7dd5cb1e17f40ed19039f9ecab8bc6ef10e1f1c5c22044`.
+  All 72 entries pass CRC; application, core and helper service are x64, and
+  the Flutter DLL is included. Windows 10 physical testing remains unperformed.
+
+The user renewed aTrust login. Its corporate route now uses a separate adapter.
+A local isolated integration test, compiled against the unchanged upstream TUN
+detector and the new route finder, ran under a live full TUN: public destinations
+were rejected as own-TUN and fell back to the physical interface; the corporate
+destination selected the VPN and actual mihomo outbound dialing returned HTTPS
+200. Native TUN and explicit-proxy external requests returned 204. TUN was then
+restored off by the bounded trial. Local-only evidence:
+`process-root/artifacts/FlClash-issue-1/native-full-tun-vpn-route-yaml2.json`
+and its companion log. This tests real route/dialer behavior, not an installed
+second-version application, whose native acceptance remains pending.
+
+Local deliveries are in `delivery-root/artifacts/FlClash-issue-1/macos-yaml2/`
+and `windows-yaml2/`. The second offline installer and previous-app restore
+entry passed zsh syntax checks; installer check mode verifies the actual build,
+app/core hashes and signature. The original installer is retained with a
+`.disabled-` suffix to avoid reinstalling the failed first candidate. Old packages,
+backups and the original-version restore entry remain available. No second app
+replacement has been performed yet.
+
 ## Scope
 
 Start from official `v0.8.94`, commit `7e7f1f89f363c31bbb7aa5af3f34a8b5c32a7a19`.
