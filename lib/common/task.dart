@@ -134,6 +134,10 @@ Future<VM2<String, String>> _makeRealProfileTask(
   if (rawConfig['tun'] == null) {
     rawConfig['tun'] = {};
   }
+  // Older cores expose the YAML field under its Go name during JSON export.
+  final tun = rawConfig['tun'];
+  tun['auto-detect-interface'] ??= tun['AutoDetectInterface'] ?? true;
+  tun.remove('AutoDetectInterface');
   rawConfig['tun']['enable'] = realPatchConfig.tun.enable;
   rawConfig['tun']['device'] = realPatchConfig.tun.device;
   rawConfig['tun']['dns-hijack'] = realPatchConfig.tun.dnsHijack;

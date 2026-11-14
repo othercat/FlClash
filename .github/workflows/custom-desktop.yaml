@@ -1,0 +1,119 @@
+name: Custom desktop
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'richardli/fix/**'
+    paths-ignore:
+      - 'issues/**'
+      - '*.md'
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_VERSION: '3.44.4'
+  GO_VERSION: '1.26.4'
+
+jobs:
+  build:
+    name: ${{ matrix.platform }}-${{ matrix.arch }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 50
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: macos
+            os: macos-15
+            arch: arm64
+          - platform: windows
+            os: windows-2025-vs2026
+            arch: amd64
+    steps:
+      - name: Enable Windows long paths
+        if: runner.os == 'Windows'
+        run: git config --global core.longpaths true
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          persist-credentials: false
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+          cache-dependency-path: core/go.sum
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          cache: true
+
+      - name: Select Xcode
+        if: runner.os == 'macOS'
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.3.app
+          xcodebuild -version
+          test "$(uname -m)" = arm64
+
+      - name: Check Visual Studio 2026
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $version = & $vswhere -latest -version '[18.0,19.0)' -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationVersion
+          if (-not $version) { throw 'Visual Studio 2026 C++ tools are required' }
+          Write-Output "Visual Studio $version"
+
+      - name: Dependencies
+        run: flutter pub get
+
+      - name: Analyze
+        run: flutter analyze --no-fatal-infos
+
+      - name: Tests
+        run: flutter test --reporter expanded
+
+      - name: Package
+        run: dart setup.dart ${{ matrix.platform }} --env stable ${{ matrix.platform == 'windows' && '--targets zip' || '' }}
+
+      - name: Identify custom artifacts
+        shell: pwsh
+        env:
+          CUSTOM_PLATFORM: ${{ matrix.platform }}
+          CUSTOM_ARCH: ${{ matrix.arch }}
+        run: |
+          Get-ChildItem dist -File | ForEach-Object {
+            $newName = $_.Name -replace '^FlClash-0\.8\.94-', 'FlClash-0.8.94-othercat-yaml1-'
+            if ($newName -ne $_.Name) {
+              Rename-Item -LiteralPath $_.FullName -NewName $newName
+            }
+          }
+          Copy-Item CUSTOM_DESKTOP.md dist/README-CUSTOM.md
+          @{
+            commit = $env:GITHUB_SHA
+            baseline = '7e7f1f89f363c31bbb7aa5af3f34a8b5c32a7a19'
+            version = '0.8.94+2026111401'
+            platform = $env:CUSTOM_PLATFORM
+            arch = $env:CUSTOM_ARCH
+            flutter = $env:FLUTTER_VERSION
+            go = $env:GO_VERSION
+          } | ConvertTo-Json | Set-Content dist/BUILD-INFO.json -Encoding utf8
+          Get-ChildItem dist -File | Where-Object Name -ne 'SHA256SUMS' | Sort-Object Name | ForEach-Object {
+            $hash = (Get-FileHash -LiteralPath $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+            "$hash  $($_.Name)"
+          } | Set-Content dist/SHA256SUMS -Encoding ascii
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: FlClash-0.8.94-othercat-yaml1-${{ matrix.platform }}-${{ matrix.arch }}
+          path: dist/
+          if-no-files-found: error
+          retention-days: 30
