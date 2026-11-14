@@ -2,6 +2,50 @@
 
 [GitHub #1](https://github.com/othercat/FlClash/issues/1)
 
+## Follow-up: one YAML for desktop and legacy mobile clients
+
+The user requires one shared YAML for this custom desktop client, latest iOS
+Shadowrocket and old Clash for Android. Separate generated mobile files are
+diagnostic candidates only, not deliveries. A locally built original Clash
+v1.18.0 parser confirms that VLESS nodes and list-valued DNS policies prevent
+the original desktop profile from loading. Common standard fields therefore
+retain supported nodes/groups and scalar DNS policies; `x-flclash-desktop`
+retains the extra nodes, complete desktop group list/order and DNS policies.
+No private profile or credential is included in this repository.
+
+Both native profile validation and reading expand the extension on macOS and
+Windows before the normal core parser. Rules and other profile settings are
+unchanged. The final shared file must pass the classic parser, and its actual
+Go desktop expansion must equal the complete working desktop profile as data.
+Build identity: `0.8.94+2026111504` / `othercat-yaml4`. Phone-native import and
+Windows 10 physical testing are separate acceptance boundaries.
+
+The stack-preservation implementation `2b2f3b2781a50def8321a67a2e12e00c80282aa8`
+passed both platform jobs in run
+[43607901393](https://github.com/othercat/FlClash/actions/runs/43607901393),
+including all 428 Flutter tests. It was merged normally into main at
+`3580a1534c36f887eef08da998c94325f1dee810` and pushed. The new branch
+`richardli/fix/1-shared-client-yaml` starts at that integration commit. Build 3
+was downloaded and verified but is not installed; build 2 remains live with a
+temporary gVisor patch until the complete shared-file build is ready.
+
+Local validation: `go test . ./profilecompat ./routeiface` passes on macOS,
+including the actual getter/validation boundary, ordering, scalar identity,
+duplicate/invalid-extension rejection and credential-free errors. Analysis
+passes with the same 10 existing informational notices. The real private shared
+candidate passes original Clash v1.18.0 with all 8,113 rules (including 102
+process rules); unknown desktop fields are ignored. Actual Go expansion is
+equal to the entire working desktop reference: 119 nodes, 44 groups, rules,
+DNS, providers and authentication fields. The shared file has 112 common nodes
+and 41 common groups; its seven VLESS nodes remain available on custom desktop.
+The original November 9 profile remains byte-identical. Evidence is local-only
+in the parent task's `classic-shared-verified.json` and
+`desktop-shared-equivalence.json`, not a public configuration attachment.
+
+The freshly fetched origin/main contains the complete prior build-3 tip with
+no missing commits. Its temporary branch was deleted locally and on origin;
+the permanent unfinished-work archive remains. No worktree was created.
+
 ## Follow-up: preserve the YAML TCP stack
 
 Build `2026111402` is installed and its native full-TUN, corporate explicit-proxy

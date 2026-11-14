@@ -1,7 +1,7 @@
-# FlClash 0.8.94 · othercat YAML 定制版 3
+# FlClash 0.8.94 · othercat YAML 定制版 4
 
 基于官方 `v0.8.94`（`7e7f1f89f363c31bbb7aa5af3f34a8b5c32a7a19`），
-应用内部构建号为 `2026111403`。目标为 Apple Silicon macOS，以及 Windows 10/11 x64。
+应用内部构建号为 `2026111504`。目标为 Apple Silicon macOS，以及 Windows 10/11 x64。
 保留上游的系统要求及安装方式；Windows ARM64 不在本次构建范围内。
 
 本版保留从配置到内核的字段传递修复：`tun.auto-detect-interface: false` 在读取、
@@ -27,7 +27,37 @@ DNS 和 DIRECT 规则提供 VPN 兼容。`false` 仍按 YAML 生效，但它关�
 客户端不会把某一家 VPN 或公司域名硬编码进产品。用户的节点、订阅和私人 YAML 不随发行物提供。
 
 每份构建附带 `BUILD-INFO.json` 和 `SHA256SUMS`，可核对源码提交、平台和文件摘要。
-产物名称中的 `othercat-yaml3` 用于区分官方版及前两版。使用官方在线更新会替换本定制修复。
+产物名称中的 `othercat-yaml4` 用于区分官方版及此前版本。使用官方在线更新会替换本定制修复。
+
+同一份 YAML 可以把旧版 Clash 能读取的节点、分组和 DNS 策略写在标准字段，
+把额外桌面配置写在顶层 `x-flclash-desktop`。定制版在 macOS/Windows 的原生
+校验及读取入口展开该字段，再交给上游配置解析器；没有扩展段的配置保持原有行为。
+其他客户端只读取标准字段。旧版 Clash 不支持的节点类型不能直接放进标准 `proxies`。
+
+扩展格式如下，示例使用虚构节点：
+
+```yaml
+proxies:
+  - {name: shared, type: ss, server: example.com, port: 443, cipher: aes-128-gcm, password: example}
+proxy-groups:
+  - {name: choose, type: select, proxies: [shared]}
+dns:
+  nameserver-policy:
+    '+.example.com': https://dns.example/dns-query
+x-flclash-desktop:
+  proxies: # 追加桌面节点；名称不得与公共节点重复
+    - {name: desktop, type: vless, server: example.net, port: 443, uuid: 00000000-0000-0000-0000-000000000000}
+  proxy-order: [desktop, shared] # 可选，必须恰好覆盖全部合并后的节点
+  proxy-groups: # 可选，整体替换公共分组，以保留桌面的成员、顺序及默认选择
+    - {name: choose, type: select, proxies: [desktop, shared]}
+  dns:
+    nameserver-policy: # 按域名覆盖公共策略，保留其他 DNS 设置
+      '+.example.com': [https://dns.example/dns-query, system]
+```
+
+扩展只支持以上四个字段；无效类型、重复节点及不完整的顺序表会明确报错，
+不会静默丢弃。手机仍需按各自客户端配置系统 VPN；此扩展不为手机提供桌面 TUN 功能。
+私有配置仅在本机验证，不上传到转换服务或源码仓库。
 
 开发验证：
 
@@ -35,7 +65,7 @@ DNS 和 DIRECT 规则提供 VPN 兼容。`false` 仍按 YAML 生效，但它关�
 flutter pub get
 flutter analyze --no-fatal-infos
 flutter test --reporter expanded
-(cd core && CGO_ENABLED=0 go test -v ./routeiface)
+(cd core && CGO_ENABLED=0 go test -v . ./routeiface ./profilecompat)
 dart setup.dart macos --env stable
 # Windows 主机：dart setup.dart windows --env stable --targets zip
 ```

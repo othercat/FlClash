@@ -80,11 +80,11 @@ jobs:
       - name: Tests
         run: flutter test --reporter expanded
 
-      - name: Native route tests
+      - name: Native route and shared-profile tests
         working-directory: core
         env:
           CGO_ENABLED: '0'
-        run: go test -v ./routeiface
+        run: go test -v . ./routeiface ./profilecompat
 
       - name: Package
         run: dart setup.dart ${{ matrix.platform }} --env stable ${{ matrix.platform == 'windows' && '--targets zip' || '' }}
@@ -96,7 +96,7 @@ jobs:
           CUSTOM_ARCH: ${{ matrix.arch }}
         run: |
           Get-ChildItem dist -File | ForEach-Object {
-            $newName = $_.Name -replace '^FlClash-0\.8\.94-', 'FlClash-0.8.94-othercat-yaml3-'
+            $newName = $_.Name -replace '^FlClash-0\.8\.94-', 'FlClash-0.8.94-othercat-yaml4-'
             if ($newName -ne $_.Name) {
               Rename-Item -LiteralPath $_.FullName -NewName $newName
             }
@@ -105,7 +105,7 @@ jobs:
           @{
             commit = $env:GITHUB_SHA
             baseline = '7e7f1f89f363c31bbb7aa5af3f34a8b5c32a7a19'
-            version = '0.8.94+2026111403'
+            version = '0.8.94+2026111504'
             platform = $env:CUSTOM_PLATFORM
             arch = $env:CUSTOM_ARCH
             flutter = $env:FLUTTER_VERSION
@@ -119,7 +119,7 @@ jobs:
       - name: Upload packages
         uses: actions/upload-artifact@v4
         with:
-          name: FlClash-0.8.94-othercat-yaml3-${{ matrix.platform }}-${{ matrix.arch }}
+          name: FlClash-0.8.94-othercat-yaml4-${{ matrix.platform }}-${{ matrix.arch }}
           path: dist/
           if-no-files-found: error
           retention-days: 30
