@@ -1,0 +1,30 @@
+ipv6: false
+tun:
+  enable: true
+  stack: mixed
+  auto-route: true
+  auto-detect-interface: true
+  strict-route: false
+  mtu: 1400
+  inet4-address:
+    - 198.18.0.1/30
+  inet6-address:
+    - fdfe:dcba:9876::1/126
+  route-address:
+    - 0.0.0.0/1
+    - ::/1
+  route-exclude-address: []
+  dns-hijack:
+    - any:53
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - https://public.example/dns-query
+proxies:
+  - name: must-not-appear
+    server: must-not-appear.example
+    password: must-not-appear
+secret: must-not-appear

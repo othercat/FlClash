@@ -1,0 +1,78 @@
+{
+  "schema": "flclash-phase1-effective-config-v1",
+  "topLevel": {
+    "ipv6": false
+  },
+  "tun": {
+    "present": true,
+    "enable": true,
+    "stack": "mixed",
+    "autoRoute": true,
+    "autoDetectInterface": null,
+    "strictRoute": null,
+    "mtu": null,
+    "udpTimeout": null,
+    "endpointIndependentNat": null,
+    "inet4Address": {
+      "present": false,
+      "count": 0,
+      "ipv4Count": 0,
+      "ipv6Count": 0,
+      "otherCount": 0
+    },
+    "inet6Address": {
+      "present": true,
+      "count": 1,
+      "ipv4Count": 0,
+      "ipv6Count": 1,
+      "otherCount": 0
+    },
+    "routeAddress": {
+      "present": false,
+      "count": 0,
+      "ipv4Count": 0,
+      "ipv6Count": 0,
+      "otherCount": 0
+    },
+    "routeExcludeAddress": {
+      "present": false,
+      "count": 0,
+      "ipv4Count": 0,
+      "ipv6Count": 0,
+      "otherCount": 0
+    },
+    "dnsHijack": {
+      "present": true,
+      "count": 1
+    }
+  },
+  "dns": {
+    "present": true,
+    "enable": true,
+    "ipv6": false,
+    "enhancedMode": "fake-ip",
+    "fakeIpRangePresent": true,
+    "nameserver": {
+      "present": true,
+      "count": 2
+    },
+    "fallback": {
+      "present": true,
+      "count": 4
+    },
+    "proxyServerNameserver": {
+      "present": true,
+      "count": 2
+    }
+  },
+  "omittedSensitiveSections": [
+    "proxies",
+    "proxy-providers",
+    "proxy-groups",
+    "rules",
+    "rule-providers",
+    "hosts",
+    "secret",
+    "nameserver values"
+  ]
+}
