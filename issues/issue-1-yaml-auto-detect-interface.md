@@ -85,3 +85,15 @@ authorized new core without the user's native system authentication. Windows 10
 physical testing is not performed. Do not infer VPN/data-sync acceptance from
 build success.
 Issue state: open.
+
+## Integration and cleanup
+
+Ordinary merge into `main`:
+`370350cdc4d6362fcdcb518ac37b6a6ee4a9bb29`, pushed to origin.
+Final feature tip: `b54ca3c43cbdb515a0665bc6b91ac87890369075`.
+The freshly fetched remote main contains that tip, has no missing commits, and
+the merge tree matches it exactly. The temporary fix branch was deleted locally
+and on origin after these checks. The permanent unfinished-work archive remains.
+No worktree was created. Local evidence/backups and the offline install/restore
+helpers remain outside Git. Runtime acceptance is still pending, and this issue
+remains open.
