@@ -46,6 +46,33 @@ The freshly fetched origin/main contains the complete prior build-3 tip with
 no missing commits. Its temporary branch was deleted locally and on origin;
 the permanent unfinished-work archive remains. No worktree was created.
 
+The user confirms the original November 9 YAML imports into their Shadowrocket
+with policy groups and routing rules visible. This supports retaining that
+standard structure, but the new shared file/extension is still awaiting their
+phone retest; it is not recorded as a new mobile-native pass.
+
+Implementation: `d76c7ab4930e302bd1e172dd57db5449d21541c0`.
+[Build 43614679135](https://github.com/othercat/FlClash/actions/runs/43614679135)
+completed successfully on both platforms: analysis, all 428 Flutter tests,
+native profile/extension/route tests and packaging. Both artifact ZIP digests
+match GitHub, inner checksum manifests match, Mac signature/arm64 core checks
+pass, and the Windows ZIP's 72 members pass CRC with x64 app/core/helper/Flutter
+components. Actual Windows 10/phone use remains untested.
+
+- Mac DMG SHA-256:
+  `3c36ff179b402ef6c04a524e4bad41bf4ad2a9355966c2482978698a25c3b838`.
+- Windows ZIP SHA-256:
+  `046c706b0bd01865298b015dca6e90d47461908540515ea5726af81f18b57cd2`.
+
+The one shared YAML has been published locally with a verified backup of its
+desktop predecessor. The running build-2 imported profile is unchanged until
+offline upgrading. The build-4 installer verifies the application, core,
+signature and exact shared profile; it backs up the prior application/data,
+replaces the app and atomically imports that same file before opening. Syntax
+and check mode pass; no native replacement has happened yet. The companion
+restore entry also restores the pre-upgrade imported profile. All packages,
+private configuration and install helpers stay outside Git.
+
 ## Follow-up: preserve the YAML TCP stack
 
 Build `2026111402` is installed and its native full-TUN, corporate explicit-proxy
