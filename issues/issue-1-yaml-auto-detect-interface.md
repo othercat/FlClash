@@ -57,6 +57,31 @@ generated successfully. Windows native compilation succeeded, then Inno Setup
 failed at the installer icon path. Deliver the upstream-supported complete ZIP
 bundle for Windows; it includes the application, core, libraries and TUN helper.
 The optional installer failure is retained in local evidence; no installer is
-claimed as delivered. ZIP packaging rerun pending.
-Runtime acceptance: pending custom build.
+claimed as delivered.
+
+[Final CI run](https://github.com/othercat/FlClash/actions/runs/43583525036)
+successfully passed analysis, tests and packaging for macOS arm64 and Windows
+x64 at `b947c0940fb446c1d6db690df3c16618989f05e1`.
+
+Validated local deliveries:
+
+- macOS DMG: `ab890615ed75df1bbaa6689f9dc6aadb2a985c792fdf0026a76d49b64cf5deea`,
+  built at `0f60404c9f587620360504e9b9558e00e68fd00d` in the first run. Signature
+  verification passed, and the core is native arm64. The later commit only
+  changes packaging instructions, workflow and this issue; application/core/macOS
+  source and dependency locks are unchanged. This already validated package is
+  retained for the local installation handoff.
+- Windows portable ZIP:
+  `c357850627ac75094fca3f1ac965749c69de594ad2aff001b4422e4ac6b4d2af`,
+  built at `b947c0940fb446c1d6db690df3c16618989f05e1`. All 72 entries are present;
+  the app, core and TUN helper have x64 PE headers, and the Flutter framework DLL
+  is included. Build metadata and checksum manifests accompany both packages.
+
+Runtime acceptance: pending the user installing the Mac candidate and completing
+native administrator authorization. A local offline installer has been syntax
+checked and validated in check mode; application/data backups are prepared.
+The original current application's privileged core cannot be replaced with an
+authorized new core without the user's native system authentication. Windows 10
+physical testing is not performed. Do not infer VPN/data-sync acceptance from
+build success.
 Issue state: open.
