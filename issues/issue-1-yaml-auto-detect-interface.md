@@ -2,6 +2,54 @@
 
 [GitHub #1](https://github.com/othercat/FlClash/issues/1)
 
+## Native regression: full TUN loses connectivity
+
+The user installed build `2026111401` and completed native authorization, then
+reported that enabling TUN broke networking across browsers, WeChat and QQ.
+They disabled TUN to recover. This supersedes the pending-installation status
+below; native acceptance has failed and this issue remains open.
+
+The profile now correctly applies `auto-detect-interface: false`, but desktop
+FlClash keeps `auto-route: true`. Without an explicit outbound interface this
+allows outbound sockets to enter the full TUN again. A bounded native trial
+with automatic rollback enabled TUN and automatic interface detection: direct
+TUN and explicit-proxy gstatic requests both returned HTTP 204. The trial
+restored the original disabled TUN state. Evidence is local-only:
+`process-root/artifacts/FlClash-issue-1/tun-auto-detect-recovery-trial.json`.
+
+Follow-up branch: `richardli/fix/1-tun-routing-coexistence`, from freshly fetched
+`main` at `aa8728dd4fa6d5898e940088aa059c83c3fb2c45`. Preserve the upstream TUN
+loop guard and YAML flag semantics. Resolve outbound interfaces using the OS
+route for the destination, so dynamically installed VPN routes can win over
+the default physical interface. Keep the pinned core submodule unchanged.
+Test real full TUN, reload/toggle behavior, and VPN access; successful builds
+alone are insufficient. Windows physical acceptance remains outstanding.
+The user explicitly deferred the remote Syncthing 5060 pending-item status.
+
+Follow-up implementation: install a destination-route-aware interface inventory
+once at desktop core initialization, beneath the existing TUN listener lifecycle.
+macOS uses bounded RTM_GET requests with unique sequences; Windows uses
+GetBestInterfaceEx. Leave unspecified/local addresses and lookup failures to the
+upstream inventory, and return the application's own TUN unchanged so the existing
+detector rejects it. No custom VPN names, routes or credentials enter the product.
+The YAML flag and explicit outbound interfaces retain their semantics.
+
+Local validation for build `2026111402`: native route tests, including concurrent
+lookups and live macOS loopback lookup, pass; the complete desktop core builds
+with Go 1.26.4 and `CGO_ENABLED=0`. Flutter 3.44.4 analysis succeeds with the same
+10 existing informational notices, and all 424 Flutter tests pass. Exclude the
+ignored process/delivery artifact roots from Dart analysis: downloaded diagnostic
+packager source under process-root otherwise generates unrelated analysis errors.
+The core submodule, Go module/sum and Flutter lock remain unchanged.
+
+Toolchain note: the runtime-assistant's all-module offline preparation rejected
+the upstream graph for an unused missing checksum. Its verified Go 1.26.4 runtime
+was selected separately, and actual package tests/core compilation ran against
+the existing module cache with `-mod=readonly`; no dependency lock was changed.
+Personal YAML, its imported profile and generated runtime were backed up, then
+only `auto-detect-interface` was changed to `true`. TUN remains disabled pending
+the corrected native build and VPN acceptance.
+
 ## Scope
 
 Start from official `v0.8.94`, commit `7e7f1f89f363c31bbb7aa5af3f34a8b5c32a7a19`.

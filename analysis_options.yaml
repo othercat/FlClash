@@ -2,6 +2,8 @@ include: package:flutter_lints/flutter.yaml
 analyzer:
   exclude:
     - build/**
+    - process-root/**
+    - delivery-root/**
     - lib/l10n/intl/**
     - lib/**/generated/**
     - plugins/**
