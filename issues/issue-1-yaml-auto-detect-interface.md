@@ -73,6 +73,18 @@ and check mode pass; no native replacement has happened yet. The companion
 restore entry also restores the pre-upgrade imported profile. All packages,
 private configuration and install helpers stay outside Git.
 
+Shared-profile integration: ordinary merge
+`6092be6edaeec8b7151f0311976f6d0c14c54ed1` is pushed to main; final feature tip
+`7a38df9ea2e9f41d81a5f3d31b543c3289be092c` and implementation `d76c7ab4` are
+reachable from freshly fetched origin/main. The merge tree equals the feature
+tree and no feature commits are missing. The old-work archive is still
+`ddad1c61145ca1d76ad53961e07588e308e7cda1`. No worktree exists. The temporary
+shared-profile branch is eligible for cleanup; native build-4 acceptance is
+pending and the issue remains open. The older, uninstalled build-3 install
+entry was renamed with a disabled timestamp; its package/restore/evidence are
+retained. The build-4 installer and handoff checksum checks pass without
+changing the current installed application.
+
 ## Follow-up: preserve the YAML TCP stack
 
 Build `2026111402` is installed and its native full-TUN, corporate explicit-proxy
