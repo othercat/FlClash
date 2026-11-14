@@ -79,4 +79,20 @@ void main() {
       expect(yaml, contains('MATCH,DIRECT'));
     });
   });
+
+  group('profile TUN stack', () {
+    for (final stack in ['gvisor', 'system', 'gVisor']) {
+      test('preserves explicit stack $stack over application default', () async {
+        final yaml = await generateProfile({'stack': stack});
+
+        expect(yaml, contains('stack: "$stack"'));
+      });
+    }
+
+    test('uses the application stack when YAML omits it', () async {
+      final yaml = await generateProfile({});
+
+      expect(yaml, contains('stack: "mixed"'));
+    });
+  });
 }

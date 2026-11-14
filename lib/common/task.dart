@@ -141,7 +141,7 @@ Future<VM2<String, String>> _makeRealProfileTask(
   rawConfig['tun']['enable'] = realPatchConfig.tun.enable;
   rawConfig['tun']['device'] = realPatchConfig.tun.device;
   rawConfig['tun']['dns-hijack'] = realPatchConfig.tun.dnsHijack;
-  rawConfig['tun']['stack'] = realPatchConfig.tun.stack.name;
+  rawConfig['tun']['stack'] ??= realPatchConfig.tun.stack.name;
   rawConfig['tun']['route-address'] = realPatchConfig.tun.routeAddress;
   rawConfig['tun']['auto-route'] = realPatchConfig.tun.autoRoute;
   rawConfig['geodata-loader'] = realPatchConfig.geodataLoader.name;

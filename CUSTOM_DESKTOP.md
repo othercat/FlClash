@@ -1,12 +1,17 @@
-# FlClash 0.8.94 · othercat YAML 定制版 2
+# FlClash 0.8.94 · othercat YAML 定制版 3
 
 基于官方 `v0.8.94`（`7e7f1f89f363c31bbb7aa5af3f34a8b5c32a7a19`），
-应用内部构建号为 `2026111402`。目标为 Apple Silicon macOS，以及 Windows 10/11 x64。
+应用内部构建号为 `2026111403`。目标为 Apple Silicon macOS，以及 Windows 10/11 x64。
 保留上游的系统要求及安装方式；Windows ARM64 不在本次构建范围内。
 
 本版保留从配置到内核的字段传递修复：`tun.auto-detect-interface: false` 在读取、
 重新载入后仍为 `false`。同时兼容旧内核 JSON 中的 `AutoDetectInterface` 名称。
 配置未指定该字段时沿用上游内核默认值 `true`。修复适用于标准配置和脚本覆写后的配置。
+
+显式提供 `tun.stack` 时同样保留 YAML 值；未提供时沿用应用界面的选择。
+这允许配置携带 `stack: gvisor`，避免在原生载入时被桌面默认的 mixed 覆盖。
+本机 Syncthing 实测：mixed 下认证公告请求超时，关闭 TUN 或改为 gVisor 后恢复；
+IPv6 没有上游路由的情况另行记录，不以一次 IPv4 成功推断所有网络环境。
 
 同时修复全量 TUN 与其他 VPN 的出口选择：开启自动识别时，先查询目标地址的系统路由，
 识别系统动态下发的 VPN 路由；发现出口仍为本应用 TUN 时，继续使用上游的物理出口
@@ -22,7 +27,7 @@ DNS 和 DIRECT 规则提供 VPN 兼容。`false` 仍按 YAML 生效，但它关�
 客户端不会把某一家 VPN 或公司域名硬编码进产品。用户的节点、订阅和私人 YAML 不随发行物提供。
 
 每份构建附带 `BUILD-INFO.json` 和 `SHA256SUMS`，可核对源码提交、平台和文件摘要。
-产物名称中的 `othercat-yaml2` 用于区分官方版及第一版。使用官方在线更新会替换本定制修复。
+产物名称中的 `othercat-yaml3` 用于区分官方版及前两版。使用官方在线更新会替换本定制修复。
 
 开发验证：
 
