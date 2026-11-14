@@ -2,6 +2,77 @@
 
 [GitHub #1](https://github.com/othercat/FlClash/issues/1)
 
+## Follow-up: one YAML for desktop and legacy mobile clients
+
+The user requires one shared YAML for this custom desktop client, latest iOS
+Shadowrocket and old Clash for Android. Separate generated mobile files are
+diagnostic candidates only, not deliveries. A locally built original Clash
+v1.18.0 parser confirms that VLESS nodes and list-valued DNS policies prevent
+the original desktop profile from loading. Common standard fields therefore
+retain supported nodes/groups and scalar DNS policies; `x-flclash-desktop`
+retains the extra nodes, complete desktop group list/order and DNS policies.
+No private profile or credential is included in this repository.
+
+Both native profile validation and reading expand the extension on macOS and
+Windows before the normal core parser. Rules and other profile settings are
+unchanged. The final shared file must pass the classic parser, and its actual
+Go desktop expansion must equal the complete working desktop profile as data.
+Build identity: `0.8.94+2026111504` / `othercat-yaml4`. Phone-native import and
+Windows 10 physical testing are separate acceptance boundaries.
+
+The stack-preservation implementation `2b2f3b2781a50def8321a67a2e12e00c80282aa8`
+passed both platform jobs in run
+[43607901393](https://github.com/othercat/FlClash/actions/runs/43607901393),
+including all 428 Flutter tests. It was merged normally into main at
+`3580a1534c36f887eef08da998c94325f1dee810` and pushed. The new branch
+`richardli/fix/1-shared-client-yaml` starts at that integration commit. Build 3
+was downloaded and verified but is not installed; build 2 remains live with a
+temporary gVisor patch until the complete shared-file build is ready.
+
+Local validation: `go test . ./profilecompat ./routeiface` passes on macOS,
+including the actual getter/validation boundary, ordering, scalar identity,
+duplicate/invalid-extension rejection and credential-free errors. Analysis
+passes with the same 10 existing informational notices. The real private shared
+candidate passes original Clash v1.18.0 with all 8,113 rules (including 102
+process rules); unknown desktop fields are ignored. Actual Go expansion is
+equal to the entire working desktop reference: 119 nodes, 44 groups, rules,
+DNS, providers and authentication fields. The shared file has 112 common nodes
+and 41 common groups; its seven VLESS nodes remain available on custom desktop.
+The original November 9 profile remains byte-identical. Evidence is local-only
+in the parent task's `classic-shared-verified.json` and
+`desktop-shared-equivalence.json`, not a public configuration attachment.
+
+The freshly fetched origin/main contains the complete prior build-3 tip with
+no missing commits. Its temporary branch was deleted locally and on origin;
+the permanent unfinished-work archive remains. No worktree was created.
+
+The user confirms the original November 9 YAML imports into their Shadowrocket
+with policy groups and routing rules visible. This supports retaining that
+standard structure, but the new shared file/extension is still awaiting their
+phone retest; it is not recorded as a new mobile-native pass.
+
+Implementation: `d76c7ab4930e302bd1e172dd57db5449d21541c0`.
+[Build 43614679135](https://github.com/othercat/FlClash/actions/runs/43614679135)
+completed successfully on both platforms: analysis, all 428 Flutter tests,
+native profile/extension/route tests and packaging. Both artifact ZIP digests
+match GitHub, inner checksum manifests match, Mac signature/arm64 core checks
+pass, and the Windows ZIP's 72 members pass CRC with x64 app/core/helper/Flutter
+components. Actual Windows 10/phone use remains untested.
+
+- Mac DMG SHA-256:
+  `3c36ff179b402ef6c04a524e4bad41bf4ad2a9355966c2482978698a25c3b838`.
+- Windows ZIP SHA-256:
+  `046c706b0bd01865298b015dca6e90d47461908540515ea5726af81f18b57cd2`.
+
+The one shared YAML has been published locally with a verified backup of its
+desktop predecessor. The running build-2 imported profile is unchanged until
+offline upgrading. The build-4 installer verifies the application, core,
+signature and exact shared profile; it backs up the prior application/data,
+replaces the app and atomically imports that same file before opening. Syntax
+and check mode pass; no native replacement has happened yet. The companion
+restore entry also restores the pre-upgrade imported profile. All packages,
+private configuration and install helpers stay outside Git.
+
 ## Follow-up: preserve the YAML TCP stack
 
 Build `2026111402` is installed and its native full-TUN, corporate explicit-proxy
