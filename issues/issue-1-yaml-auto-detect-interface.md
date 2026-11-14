@@ -2,6 +2,53 @@
 
 [GitHub #1](https://github.com/othercat/FlClash/issues/1)
 
+## Native macOS acceptance — 2026-11-15
+
+The user installed `0.8.94+2026111504` and enabled TUN. Installed app, arm64
+core and AOT hashes match the verified package; native authorization is present.
+The standard profile has no script. Its raw shared file has 112 common and
+seven extension nodes, while the actual application-generated/runtime config
+has all 119 nodes, 44 groups and 8,113 rules. The extension is removed before
+the normal parser. gVisor, auto-route and auto-detect-interface are all enabled;
+there is no fixed outbound adapter. System HTTP/HTTPS/SOCKS proxies are enabled.
+
+Native corporate HTTPS returns 200 through both ordinary TUN and an explicit
+HTTP proxy; external requests return 204 through both paths. WeChat/QQ public
+websites return 200. The original default-discovery Syncthing service was
+restarted for a fresh test: IPv4 announcement succeeds by uptime five seconds,
+and native QUIC plus relay peer connections were observed afterward. The local
+folder is idle with 282 files, needFiles/pullErrors zero. IPv6 has no usable
+coverage here; the user's deferred remote pending items were not investigated.
+
+The Microsoft scientific group defaults to Singapore; ordinary Microsoft uses
+DIRECT. Transient DNS errors/10-second failures occurred immediately after the
+initial reload, while direct physical/core requests succeeded once resolution
+recovered. Fourteen Microsoft/auth/Office suffixes now use the existing domestic
+DoH resolvers through scoped nameserver policies. The common profile uses a
+classic-compatible scalar; desktop restores both resolvers. No node, group,
+rule, subscription or authentication data changed in this final DNS amendment.
+After applying the file through the native standard-profile UI, all 14 policies
+are present in the generated config. First requests return 200 for Microsoft's
+website, global login and China login via DIRECT, and 200 for Copilot via
+Singapore; corporate/external regression checks still pass.
+
+The final shared file again passes the original Clash v1.18.0 parser; actual
+Go expansion equals the complete desktop reference with only the scoped DNS
+amendment. The original November 9 file is unchanged. Current Mac/Windows
+packages and the actual pre-upgrade build-2 application/data backup were
+rechecked as available. Offline install/restore syntax, install check mode
+and handoff manifests pass with the final shared-file hash. The fully merged
+temporary shared-profile branch has been removed locally and on origin.
+
+Local-only evidence: `process-root/artifacts/FlClash-issue-1/` contains
+`native-yaml4-installed-state.json`, `native-yaml4-final-config.json`,
+`native-yaml4-final-network.json`, `native-yaml4-final-acceptance.json`, and the
+Syncthing/Microsoft comparisons. These contain no public configuration link.
+New iOS/Android imports and Windows 10 physical VPN tests remain unperformed;
+the user explicitly deferred their phone retest. The issue stays open for
+those platform acceptance boundaries; development/delivery and Mac native
+regressions are complete.
+
 ## Follow-up: one YAML for desktop and legacy mobile clients
 
 The user requires one shared YAML for this custom desktop client, latest iOS
