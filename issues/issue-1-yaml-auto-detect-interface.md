@@ -2,6 +2,39 @@
 
 [GitHub #1](https://github.com/othercat/FlClash/issues/1)
 
+## Follow-up: preserve the YAML TCP stack
+
+Build `2026111402` is installed and its native full-TUN, corporate explicit-proxy
+and ordinary external HTTPS checks pass. A remaining Syncthing default discovery
+announcement was isolated with real service requests: the authenticated IPv4 POST
+times out with the mixed stack, succeeds with TUN disabled, and succeeds with
+full TUN using gVisor (six seconds after a service restart). Native queries,
+relay transport and the local folder are otherwise healthy. MTU 1500 did not
+resolve the problem; the original MTU was restored. DNS/proxy-only trials did
+not resolve the authenticated request and were rolled back. Evidence is local:
+`process-root/artifacts/FlClash-issue-1/syncthing-stack-trial.json` and
+`syncthing-tun-off-baseline.json`.
+
+The profile generation task unconditionally replaces `tun.stack` with the GUI
+default, so a YAML-only stack remedy does not survive native loading. Preserve
+an explicitly supplied stack (including the core's exported `gVisor` spelling)
+and use the application value only when the profile omits it. The interface
+detection fix, native route finder and pinned core remain unchanged. Native
+package acceptance of this final field-preservation change is pending.
+
+Validation: three explicit-stack cases fail before the one-line fix; all 11
+profile field tests pass afterward. All 428 Flutter tests pass, and analysis
+exits successfully with only the same 10 existing informational notices. Build
+identity is `2026111403` / `othercat-yaml3`; dependency locks and Go source are
+unchanged from the already compiled and tested route-aware second version.
+
+Follow-up branch: `richardli/fix/1-yaml-tun-stack`, from freshly fetched main
+`e7bdec1eada7e24ead4ede9ae9fcb20184178bbf`. The prior implementation was merged
+normally; tip `1a16470e51231bc00f9d2350189c40f4b40c1b26` and its merge are
+reachable from current origin/main, with no missing commits and an identical
+merge tree. Its temporary branch was removed locally and on origin; the
+permanent archive branch and all prior evidence/backups remain.
+
 ## Native regression: full TUN loses connectivity
 
 The user installed build `2026111401` and completed native authorization, then
