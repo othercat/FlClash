@@ -11,7 +11,10 @@ import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 
+import 'fishport.dart';
+
 class CoreController {
+  final fishport = DesktopFishport();
   static CoreController? _instance;
   late CoreHandlerInterface _interface;
 
@@ -215,6 +218,13 @@ class CoreController {
       final data = Map<String, dynamic>.from(res.data);
       data['rules'] = data['rule'];
       data.remove('rule');
+      if (Platform.isMacOS || Platform.isWindows) {
+        await fishport.configure(
+          data,
+          await appPath.homeDirPath,
+          profileId: id,
+        );
+      }
       return data;
     } else {
       throw res.message;
@@ -272,6 +282,7 @@ class CoreController {
   }
 
   Future<void> destroy() async {
+    await fishport.close();
     await _interface.destroy();
   }
 

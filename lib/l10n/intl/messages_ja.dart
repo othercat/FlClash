@@ -317,6 +317,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "findProcessModeDesc": MessageLookupByLibrary.simpleMessage(
       "有効化するとパフォーマンスが若干低下します",
     ),
+    "fishportInvalidLoginFile": MessageLookupByLibrary.simpleMessage(
+      "ログインファイルの形式エラー",
+    ),
+    "fishportLoginFileHint": MessageLookupByLibrary.simpleMessage(
+      "1 行目にユーザー名、2 行目にパスワードを入力してください。保存すると自動で再試行します。",
+    ),
+    "fishportLoginRejected": MessageLookupByLibrary.simpleMessage(
+      "ユーザー名またはパスワードが違います",
+    ),
+    "fishportMissingLogin": MessageLookupByLibrary.simpleMessage(
+      "ログインファイルがありません",
+    ),
+    "fishportRateLimited": MessageLookupByLibrary.simpleMessage(
+      "ログイン試行回数が多すぎます",
+    ),
+    "fishportUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Fishport を利用できません",
+    ),
+    "fishportUnreadableLogin": MessageLookupByLibrary.simpleMessage(
+      "ログインファイルを読み取れません",
+    ),
     "fontFamily": MessageLookupByLibrary.simpleMessage("フォントファミリー"),
     "forceRestartCoreTip": MessageLookupByLibrary.simpleMessage(
       "コアを強制再起動してもよろしいですか？",

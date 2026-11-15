@@ -80,3 +80,30 @@ Windows 使用完整的免安装 ZIP。解压到固定目录后运行其中的 `
 
 此前未完成的调查与脚本保存在
 [`archive/20261114-unfinished-customization`](https://github.com/othercat/FlClash/tree/archive/20261114-unfinished-customization)。
+
+## Fishport 桌面便携包
+
+含 Fishport 的桌面版本在读取带有 `x-fishport-protocol: phantom` 的 SOCKS5 节点时，
+由 FlClash 启动同包的普通用户进程 `FPPhantomCore`。在共享 YAML 中使用稳定的订阅节点 ID，
+或官方订阅显示名中第一个竖线前的唯一名称。客户端在内存中为这些节点填写本次的回环端口、
+证书指纹及随机口令，手动选择和 URL 测速使用同一套节点。官方库负责 Phantom 的实际 TCP 连接。
+每台设备只从当前登录用户的主目录读取 UTF-8 文件。macOS 使用 `~/fishport-pass.txt`，
+Windows 使用 `%USERPROFILE%\fishport-pass.txt`。第一行填写账号，第二行填写密码。
+缺文件、不能读取、格式错误或官方拒绝账号时，节点卡片显示具体提示。点按或悬停可查看路径和填写方式。
+新增或更正文件后客户端自动重试，登录成功后恢复正常的节点测速显示。
+助手的设备状态位于 FlClash 应用数据目录，退出客户端时助手随之退出。
+
+解压后运行 `FlClash.app` 或 `FlClash.exe`，自行导入个人 YAML。
+Mac 包使用本地 ad-hoc 签名。Windows 包携带 x64 微软运行库。两端均无需 Python 或开机服务。
+
+打包机使用与当前 Flutter 客户端匹配的构建目录。Apple Silicon 上从 `services/phantom`
+执行 `CGO_ENABLED=1 GOARCH=arm64 go build -trimpath -o FPPhantomCore .`；
+Windows x64 助手可用 `GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trimpath -ldflags="-H=windowsgui" -o FPPhantomCore.exe .` 构建。
+打包输入目录包含对应助手、Fishport 1.2.52 的官方平台库（`libnfxcore.dylib` 或
+`nfxcore.dll`）、官方的 `rd.bin`、`rs.bin`、`api-transport-bundle.b64` 与
+`airport-id`。Windows 输入还包含 Microsoft VC++ x64 Redistributable 中的
+`msvcp140.dll`、`vcruntime140.dll` 和 `vcruntime140_1.dll`。
+
+在构建 Mac 上执行 `dart tool/package_fishport.dart --help` 查看参数。
+指定 `--platform`、`--app`、`--runtime` 和新的 `--out` ZIP 路径。
+打包器在临时目录里装配应用副本，交付 ZIP 仅含客户端及其运行组件。

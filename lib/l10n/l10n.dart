@@ -54,6 +54,76 @@ class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
+  /// `Login file missing`
+  String get fishportMissingLogin {
+    return Intl.message(
+      'Login file missing',
+      name: 'fishportMissingLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Login file format error`
+  String get fishportInvalidLoginFile {
+    return Intl.message(
+      'Login file format error',
+      name: 'fishportInvalidLoginFile',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cannot read login file`
+  String get fishportUnreadableLogin {
+    return Intl.message(
+      'Cannot read login file',
+      name: 'fishportUnreadableLogin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Incorrect username or password`
+  String get fishportLoginRejected {
+    return Intl.message(
+      'Incorrect username or password',
+      name: 'fishportLoginRejected',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Too many login attempts`
+  String get fishportRateLimited {
+    return Intl.message(
+      'Too many login attempts',
+      name: 'fishportRateLimited',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fishport unavailable`
+  String get fishportUnavailable {
+    return Intl.message(
+      'Fishport unavailable',
+      name: 'fishportUnavailable',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enter the username on the first line and the password on the second. Save to retry automatically.`
+  String get fishportLoginFileHint {
+    return Intl.message(
+      'Enter the username on the first line and the password on the second. Save to retry automatically.',
+      name: 'fishportLoginFileHint',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Rule`
   String get rule {
     return Intl.message('Rule', name: 'rule', desc: '', args: []);

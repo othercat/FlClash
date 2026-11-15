@@ -416,6 +416,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "findProcessModeDesc": MessageLookupByLibrary.simpleMessage(
       "При включении возможны небольшие потери производительности",
     ),
+    "fishportInvalidLoginFile": MessageLookupByLibrary.simpleMessage(
+      "Неверный формат файла",
+    ),
+    "fishportLoginFileHint": MessageLookupByLibrary.simpleMessage(
+      "Введите имя в первой строке и пароль во второй. После сохранения вход повторится автоматически.",
+    ),
+    "fishportLoginRejected": MessageLookupByLibrary.simpleMessage(
+      "Неверное имя или пароль",
+    ),
+    "fishportMissingLogin": MessageLookupByLibrary.simpleMessage(
+      "Нет файла учётных данных",
+    ),
+    "fishportRateLimited": MessageLookupByLibrary.simpleMessage(
+      "Слишком много попыток входа",
+    ),
+    "fishportUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Fishport недоступен",
+    ),
+    "fishportUnreadableLogin": MessageLookupByLibrary.simpleMessage(
+      "Не удалось прочитать файл",
+    ),
     "fontFamily": MessageLookupByLibrary.simpleMessage("Семейство шрифтов"),
     "forceRestartCoreTip": MessageLookupByLibrary.simpleMessage(
       "Вы уверены, что хотите принудительно перезапустить ядро?",

@@ -1,4 +1,11 @@
 {
+  "fishportMissingLogin": "ログインファイルがありません",
+  "fishportInvalidLoginFile": "ログインファイルの形式エラー",
+  "fishportUnreadableLogin": "ログインファイルを読み取れません",
+  "fishportLoginRejected": "ユーザー名またはパスワードが違います",
+  "fishportRateLimited": "ログイン試行回数が多すぎます",
+  "fishportUnavailable": "Fishport を利用できません",
+  "fishportLoginFileHint": "1 行目にユーザー名、2 行目にパスワードを入力してください。保存すると自動で再試行します。",
   "rule": "ルール",
   "global": "グローバル",
   "direct": "ダイレクト",
