@@ -52,6 +52,35 @@ acceptance; these are not physical M4/macOS 27 or RTX 3060/Windows 11 acceptance
 The source merge and cleanup receipts will record the actual commit IDs and
 retained local evidence. Keep this issue open for the remaining device checks.
 
+### Ordinary merge and cleanup receipt
+
+Implementation: `badecacc3eedc6d51ebdc5b6875f43ca94aceb82`.
+Default-branch ordinary merge: `abc9b68b76cbe023965df86c3abefa652aa9fbb1`
+on `main`, pushed and verified on origin. The merge tree equals the verified
+implementation tree. The final feature tip is the implementation commit; its
+commits are all reachable from remote main, with no missing commits.
+
+The user-authorized obsolete task staging, previous package copies, test output
+and AOT caches have been removed. Combined related-task cleanup measured
+4,618,444 KiB (4.404 GiB) by the pre-removal directory allocation. The obsolete
+system DNS profile delivery was separately retired after verifying its rollback
+archive. The latest home-login Mac/Windows ZIPs above still match SHA-256.
+Final validation receipts, app/data rollback backups, the currently running
+installed application and the independently installed legacy helper runtime
+remain intact. The cleanup did not reconfigure or stop any running proxy.
+
+Before removing staging, 81 small build/diagnostic recipes and license records
+were archived and read back against their SHA-256 values. The private archive
+digest is `34c2cc01b18b7aac87874070a6a9fd2775b1eacd49166d88b5324e139d2c5fe8`;
+the retained local handoff records contain its location and the complete
+per-entry cleanup inventory. Historical staging links in earlier receipts are
+retired paths, rather than currently available build directories.
+
+The fully merged local `richardli/feat/1-portable-fishport` branch was deleted
+after the final remote ancestry check; no corresponding remote branch was published. The permanent
+`archive/20261114-unfinished-customization` branch remains. No worktree was
+created. Physical target-device acceptance remains open.
+
 ## Native macOS acceptance — 2026-11-15
 
 The user installed `0.8.94+2026111504` and enabled TUN. Installed app, arm64
