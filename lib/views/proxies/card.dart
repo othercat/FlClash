@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:fl_clash/common/common.dart';
+import 'package:fl_clash/core/controller.dart';
+import 'package:fl_clash/core/fishport.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 import 'package:fl_clash/providers/providers.dart';
@@ -95,6 +99,19 @@ class ProxyCard extends StatelessWidget {
     }
   }
 
+  Widget _withFishportStatus(Widget child) {
+    if (!Platform.isMacOS && !Platform.isWindows) return child;
+    return Consumer(
+      builder: (context, ref, child) => FishportNodeStatus(
+        service: coreController.fishport,
+        profileId: ref.watch(currentProfileProvider.select((p) => p?.id)),
+        name: proxy.name,
+        child: child!,
+      ),
+      child: child,
+    );
+  }
+
   Future<void> _changeProxy(WidgetRef ref) async {
     final isComputedSelected = groupType.isComputedSelected;
     final isSelector = groupType == GroupType.Selector;
@@ -152,32 +169,37 @@ class ProxyCard extends StatelessWidget {
                     child: _ProxyDesc(proxy: proxy),
                   ),
                   const SizedBox(height: 6),
-                  delayText,
+                  SizedBox(
+                    height: measure.labelSmallHeight,
+                    child: _withFishportStatus(delayText),
+                  ),
                 ] else
                   SizedBox(
                     height: measure.bodySmallHeight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Flexible(
-                          flex: 1,
-                          child: TooltipText(
-                            text: Text(
-                              proxy.type,
-                              style: context.textTheme.bodySmall?.copyWith(
-                                overflow: TextOverflow.ellipsis,
-                                color: context
-                                    .textTheme
-                                    .bodySmall
-                                    ?.color
-                                    ?.opacity80,
+                    child: _withFishportStatus(
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            flex: 1,
+                            child: TooltipText(
+                              text: Text(
+                                proxy.type,
+                                style: context.textTheme.bodySmall?.copyWith(
+                                  overflow: TextOverflow.ellipsis,
+                                  color: context
+                                      .textTheme
+                                      .bodySmall
+                                      ?.color
+                                      ?.opacity80,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        delayText,
-                      ],
+                          delayText,
+                        ],
+                      ),
                     ),
                   ),
               ],
@@ -191,6 +213,61 @@ class ProxyCard extends StatelessWidget {
             child: _ProxyComputedMark(groupName: groupName, proxy: proxy),
           ),
       ],
+    );
+  }
+}
+
+class FishportNodeStatus extends StatelessWidget {
+  const FishportNodeStatus({
+    super.key,
+    required this.service,
+    required this.profileId,
+    required this.name,
+    required this.child,
+  });
+
+  final DesktopFishport service;
+  final int? profileId;
+  final String name;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListenableBuilder(
+      listenable: service,
+      builder: (context, child) {
+        final problem = service.problemFor(profileId, name);
+        if (problem == null) return child!;
+        final l10n = context.appLocalizations;
+        final label = switch (problem) {
+          FishportProblem.missing => l10n.fishportMissingLogin,
+          FishportProblem.format => l10n.fishportInvalidLoginFile,
+          FishportProblem.unreadable => l10n.fishportUnreadableLogin,
+          FishportProblem.rejected => l10n.fishportLoginRejected,
+          FishportProblem.rateLimited => l10n.fishportRateLimited,
+          FishportProblem.unavailable => l10n.fishportUnavailable,
+        };
+        final path = Platform.isWindows
+            ? r'%USERPROFILE%\fishport-pass.txt'
+            : '~/fishport-pass.txt';
+        final message = switch (problem) {
+          FishportProblem.rateLimited || FishportProblem.unavailable => label,
+          _ => '$label\n$path\n${l10n.fishportLoginFileHint}',
+        };
+        return Tooltip(
+          triggerMode: TooltipTriggerMode.tap,
+          message: message,
+          child: Text(
+            label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: context.textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).colorScheme.error,
+            ),
+          ),
+        );
+      },
+      child: child,
     );
   }
 }

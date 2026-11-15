@@ -283,6 +283,19 @@ class MessageLookup extends MessageLookupByLibrary {
     "fileIsUpdate": MessageLookupByLibrary.simpleMessage("文件有修改，是否保存修改"),
     "findProcessMode": MessageLookupByLibrary.simpleMessage("查找进程"),
     "findProcessModeDesc": MessageLookupByLibrary.simpleMessage("开启后会有一定性能损耗"),
+    "fishportInvalidLoginFile": MessageLookupByLibrary.simpleMessage(
+      "账号文件格式错误",
+    ),
+    "fishportLoginFileHint": MessageLookupByLibrary.simpleMessage(
+      "第一行填写账号，第二行填写密码。保存后自动重试。",
+    ),
+    "fishportLoginRejected": MessageLookupByLibrary.simpleMessage("账号或密码错误"),
+    "fishportMissingLogin": MessageLookupByLibrary.simpleMessage("缺少账号文件"),
+    "fishportRateLimited": MessageLookupByLibrary.simpleMessage("登录过于频繁，稍后重试"),
+    "fishportUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Fishport 暂时不可用",
+    ),
+    "fishportUnreadableLogin": MessageLookupByLibrary.simpleMessage("无法读取账号文件"),
     "fontFamily": MessageLookupByLibrary.simpleMessage("字体"),
     "forceRestartCoreTip": MessageLookupByLibrary.simpleMessage("您确定要强制重启核心吗？"),
     "fruitSaladScheme": MessageLookupByLibrary.simpleMessage("果缤纷"),

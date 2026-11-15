@@ -2,6 +2,56 @@
 
 [GitHub #1](https://github.com/othercat/FlClash/issues/1)
 
+## Fishport desktop packaging, 2026-11-15
+
+The current macOS arm64 and Windows x64 ZIPs are in the local delivery directory
+`delivery-root/artifacts/FlClash-issue-1/fishport-home-login/`. They carry the
+client and native dependencies. The helper reads only the current user's
+`fishport-pass.txt` in their home directory. Marked nodes show file and login
+errors in the delay row. Correcting the file restores the existing node entries.
+
+Isolated Apple Silicon and Windows 11 ARM/x64 runs ignored account files in
+the application directory, reported missing, malformed and rejected credentials,
+and loaded 24 nodes after correction. The Mac run started with a successful
+session before checking removal, rejection and recovery. Flutter widget tests
+exercised the Chinese labels and the file tooltip. All 430 Flutter tests and
+the Go race tests passed. Local receipts and archive hashes are under
+`process-root/artifacts/FlClash-issue-1/fishport-home-login/validation.json`.
+The user retains control of profile import and live client switching.
+
+### Previous private bundles
+
+Personal macOS arm64 and Windows x64 ZIPs were delivered in the now-retired local directory
+`delivery-root/artifacts/FlClash-issue-1/fishport-desktop/`. Those bundles contained a two-line
+account file beside the application and the same shared profile. The application resolves
+individual Phantom routes through its bundled child process. The native helper logged in
+and returned HK and JP exits on Apple Silicon and under Windows 11 x64 emulation.
+The current Mac is running the user's older configuration. The user controls all live
+switchovers. Physical M4/macOS 27 and RTX 3060/Windows 11 acceptance remains open.
+
+### Integration verification, 2026-11-15
+
+The user authorized committing, pushing, ordinary merging to the default branch,
+and removing obsolete staging and delivery copies. The portable helper and UI
+source have been reviewed without changing the running application. With the
+existing Flutter 3.44.4 SDK, offline dependency resolution, locale generation,
+analysis and all 430 tests pass. Analysis reports the same ten existing
+deprecation infos and no warnings or errors. Go 1.26.4 race tests and vet pass;
+the Windows amd64 helper also cross-compiles. No live profile, system proxy,
+TUN setting, node selection or running process is changed by these checks.
+
+The existing latest private archives remain the deliveries:
+
+- macOS arm64: `a73c49b3af2119ebe1e6581e51d37863c5d4824d547013fb2b274db8dba12f0e`.
+- Windows x64: `24cbf4e570d0428c55f233f2bab4361615404737a81b3c75b37f2d88f9247a20`.
+
+Publication checks cover the exact changed source files: no personal credentials,
+private YAML or machine-specific user paths are included. Native vendor login
+and 24-node recovery use the previously recorded isolated Mac and Windows VM
+acceptance; these are not physical M4/macOS 27 or RTX 3060/Windows 11 acceptance.
+The source merge and cleanup receipts will record the actual commit IDs and
+retained local evidence. Keep this issue open for the remaining device checks.
+
 ## Native macOS acceptance — 2026-11-15
 
 The user installed `0.8.94+2026111504` and enabled TUN. Installed app, arm64

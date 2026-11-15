@@ -1,4 +1,11 @@
 {
+  "fishportMissingLogin": "Login file missing",
+  "fishportInvalidLoginFile": "Login file format error",
+  "fishportUnreadableLogin": "Cannot read login file",
+  "fishportLoginRejected": "Incorrect username or password",
+  "fishportRateLimited": "Too many login attempts",
+  "fishportUnavailable": "Fishport unavailable",
+  "fishportLoginFileHint": "Enter the username on the first line and the password on the second. Save to retry automatically.",
   "rule": "Rule",
   "global": "Global",
   "direct": "Direct",

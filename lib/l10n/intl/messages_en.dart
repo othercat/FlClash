@@ -401,6 +401,27 @@ class MessageLookup extends MessageLookupByLibrary {
     "findProcessModeDesc": MessageLookupByLibrary.simpleMessage(
       "There is a certain performance loss after opening",
     ),
+    "fishportInvalidLoginFile": MessageLookupByLibrary.simpleMessage(
+      "Login file format error",
+    ),
+    "fishportLoginFileHint": MessageLookupByLibrary.simpleMessage(
+      "Enter the username on the first line and the password on the second. Save to retry automatically.",
+    ),
+    "fishportLoginRejected": MessageLookupByLibrary.simpleMessage(
+      "Incorrect username or password",
+    ),
+    "fishportMissingLogin": MessageLookupByLibrary.simpleMessage(
+      "Login file missing",
+    ),
+    "fishportRateLimited": MessageLookupByLibrary.simpleMessage(
+      "Too many login attempts",
+    ),
+    "fishportUnavailable": MessageLookupByLibrary.simpleMessage(
+      "Fishport unavailable",
+    ),
+    "fishportUnreadableLogin": MessageLookupByLibrary.simpleMessage(
+      "Cannot read login file",
+    ),
     "fontFamily": MessageLookupByLibrary.simpleMessage("FontFamily"),
     "forceRestartCoreTip": MessageLookupByLibrary.simpleMessage(
       "Are you sure you want to force restart the core?",

@@ -1,4 +1,11 @@
 {
+  "fishportMissingLogin": "Нет файла учётных данных",
+  "fishportInvalidLoginFile": "Неверный формат файла",
+  "fishportUnreadableLogin": "Не удалось прочитать файл",
+  "fishportLoginRejected": "Неверное имя или пароль",
+  "fishportRateLimited": "Слишком много попыток входа",
+  "fishportUnavailable": "Fishport недоступен",
+  "fishportLoginFileHint": "Введите имя в первой строке и пароль во второй. После сохранения вход повторится автоматически.",
   "rule": "Правило",
   "global": "Глобальный",
   "direct": "Прямой",
