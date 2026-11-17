@@ -178,6 +178,9 @@ _NetworkProps _$NetworkPropsFromJson(Map<String, dynamic> json) =>
           RouteMode.config,
       autoSetSystemDns: json['autoSetSystemDns'] as bool? ?? true,
       appendSystemDns: json['appendSystemDns'] as bool? ?? false,
+      hotspotGateway: json['hotspotGateway'] as bool? ?? true,
+      bypassRouter: json['bypassRouter'] as bool? ?? true,
+      bypassRouterAddress: json['bypassRouterAddress'] as String? ?? '',
     );
 
 Map<String, dynamic> _$NetworkPropsToJson(_NetworkProps instance) =>
@@ -187,6 +190,9 @@ Map<String, dynamic> _$NetworkPropsToJson(_NetworkProps instance) =>
       'routeMode': _$RouteModeEnumMap[instance.routeMode]!,
       'autoSetSystemDns': instance.autoSetSystemDns,
       'appendSystemDns': instance.appendSystemDns,
+      'hotspotGateway': instance.hotspotGateway,
+      'bypassRouter': instance.bypassRouter,
+      'bypassRouterAddress': instance.bypassRouterAddress,
     };
 
 const _$RouteModeEnumMap = {

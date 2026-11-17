@@ -6,9 +6,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"net"
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"sync"
 
 	"github.com/metacubex/mihomo/adapter"
@@ -105,6 +107,25 @@ func sideUpdateExternalProvider(p cp.Provider, bytes []byte) error {
 	}
 }
 
+func proxyBindAddress(host string, allowLan bool) string {
+	if !allowLan {
+		return "127.0.0.1"
+	}
+	host = strings.TrimSpace(host)
+	if host == "" || strings.EqualFold(host, "localhost") {
+		return "*"
+	}
+	address := host
+	if strings.HasPrefix(address, "[") && strings.HasSuffix(address, "]") {
+		address = address[1 : len(address)-1]
+	}
+	// Legacy loopback bindings must not defeat the explicit LAN access option.
+	if ip := net.ParseIP(address); ip != nil && ip.IsLoopback() {
+		return "*"
+	}
+	return host
+}
+
 func updateListeners() {
 	if !isRunning {
 		return
@@ -122,7 +143,7 @@ func updateListeners() {
 	inbound.SetAllowedIPs(general.LanAllowedIPs)
 	inbound.SetDisAllowedIPs(general.LanDisAllowedIPs)
 
-	bindAddress := general.BindAddress
+	bindAddress := proxyBindAddress(general.BindAddress, allowLan)
 	listener.SetBindAddress(bindAddress)
 	listener.ReCreateHTTP(general.Port, tunnel.Tunnel)
 	listener.ReCreateSocks(general.SocksPort, tunnel.Tunnel)
@@ -185,6 +206,9 @@ func updateConfig(params *UpdateParams) {
 	runLock.Lock()
 	defer runLock.Unlock()
 	general := currentConfig.General
+	if params.AllowLan != nil {
+		general.AllowLan = *params.AllowLan
+	}
 	if params.MixedPort != nil {
 		general.MixedPort = *params.MixedPort
 	}

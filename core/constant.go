@@ -106,6 +106,10 @@ const (
 	crashMethod                    Method = "crash"
 	setupConfigMethod              Method = "setupConfig"
 	getConfigMethod                Method = "getConfig"
+	getHotspotGatewayMethod        Method = "getHotspotGateway"
+	setHotspotGatewayMethod        Method = "setHotspotGateway"
+	getSoftRouterMethod            Method = "getSoftRouter"
+	setSoftRouterMethod            Method = "setSoftRouter"
 	deleteFile                     Method = "deleteFile"
 )
 

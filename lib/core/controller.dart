@@ -12,11 +12,15 @@ import 'package:flutter/services.dart';
 import 'package:path/path.dart';
 
 import 'fishport.dart';
+import 'gateway_session.dart';
+import 'hotspot.dart';
+import 'soft_router.dart';
 
 class CoreController {
   final fishport = DesktopFishport();
   static CoreController? _instance;
   late CoreHandlerInterface _interface;
+  late final _gateways = GatewaySession(_interface);
 
   CoreController._internal() {
     if (system.isAndroid) {
@@ -42,6 +46,7 @@ class CoreController {
   bool get isCompleted => _interface.completer.isCompleted;
 
   Future<String> preload() {
+    _gateways.disconnect();
     return _interface.preload();
   }
 
@@ -80,6 +85,7 @@ class CoreController {
   }
 
   Future<void> shutdown(bool isUser) async {
+    _gateways.disconnect();
     await _interface.shutdown(isUser);
   }
 
@@ -100,7 +106,31 @@ class CoreController {
   }
 
   Future<String> updateConfig(UpdateParams updateParams) async {
-    return _interface.updateConfig(updateParams);
+    final message = await _interface.updateConfig(updateParams);
+    if (message.isEmpty) await _gateways.ready();
+    return message;
+  }
+
+  Future<void> configureGateways(NetworkProps settings) => _gateways.configure(
+    hotspot: settings.hotspotGateway,
+    router: settings.bypassRouter,
+    address: settings.bypassRouterAddress,
+  );
+
+  Future<HotspotGatewayStatus> getHotspotGateway() {
+    return _gateways.getHotspot();
+  }
+
+  Future<SoftRouterStatus> getSoftRouter() {
+    return _gateways.getRouter();
+  }
+
+  Future<SoftRouterStatus> setSoftRouter(bool enabled, String address) {
+    return _gateways.setRouter(enabled, address);
+  }
+
+  Future<HotspotGatewayStatus> setHotspotGateway(bool enabled) {
+    return _gateways.setHotspot(enabled);
   }
 
   Future<String> setupConfig({
@@ -112,7 +142,9 @@ class CoreController {
     if (preloadInvoke != null) {
       preloadInvoke();
     }
-    return res;
+    final message = await res;
+    if (message.isEmpty) await _gateways.ready();
+    return message;
   }
 
   Future<List<Group>> getProxiesGroups({
@@ -199,7 +231,9 @@ class CoreController {
   }
 
   Future<bool> startListener() async {
-    return _interface.startListener();
+    final started = await _interface.startListener();
+    if (started) await _gateways.ready();
+    return started;
   }
 
   Future<bool> stopListener() async {
