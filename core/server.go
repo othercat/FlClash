@@ -6,7 +6,10 @@ import (
 	"encoding/binary"
 	"encoding/json"
 	"io"
+	"os"
+	"os/signal"
 	"sync"
+	"syscall"
 )
 
 var (
@@ -65,6 +68,22 @@ func send(data []byte) {
 }
 
 func startServer(arg string) {
+	defer softRouterGateway.Close()
+	defer hotspotGateway.Close()
+	signals := make(chan os.Signal, 1)
+	done := make(chan struct{})
+	signal.Notify(signals, os.Interrupt, syscall.SIGTERM)
+	defer signal.Stop(signals)
+	defer close(done)
+	go func() {
+		select {
+		case <-signals:
+			softRouterGateway.Close()
+			hotspotGateway.Close()
+			os.Exit(0)
+		case <-done:
+		}
+	}()
 	var err error
 	conn, err = dial(arg)
 	if err != nil {

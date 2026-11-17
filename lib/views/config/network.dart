@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import 'hotspot.dart';
+import 'soft_router.dart';
+
 class VPNItem extends ConsumerWidget {
   const VPNItem({super.key});
 
@@ -359,6 +362,8 @@ class NetworkListView extends StatelessWidget {
         items: [
           if (system.isDesktop) const TUNItem(),
           if (system.isMacOS) const AutoSetSystemDnsItem(),
+          if (system.isMacOS) const HotspotGatewayItem(),
+          if (system.isMacOS) const SoftRouterItem(),
           const TunStackItem(),
           if (!system.isDesktop) ...[
             const RouteModeItem(),

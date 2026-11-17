@@ -48,6 +48,34 @@ func handleAction(action *Action, result ActionResult) {
 		}
 	}()
 	switch action.Method {
+	case getSoftRouterMethod:
+		result.success(softRouterGateway.Status())
+		return
+	case setSoftRouterMethod:
+		data, ok := action.Data.(map[string]interface{})
+		if !ok {
+			result.error("invalid soft router settings")
+			return
+		}
+		enabled, ok := data["enabled"].(bool)
+		address, addressOK := data["address"].(string)
+		if !ok || !addressOK {
+			result.error("invalid soft router enabled flag or IPv4 address")
+			return
+		}
+		result.success(softRouterGateway.SetRouter(enabled, address))
+		return
+	case getHotspotGatewayMethod:
+		result.success(hotspotGateway.Status())
+		return
+	case setHotspotGatewayMethod:
+		enabled, ok := action.Data.(bool)
+		if !ok {
+			result.error("invalid hotspot enabled flag")
+			return
+		}
+		result.success(hotspotGateway.SetEnabled(enabled))
+		return
 	case initClashMethod:
 		paramsString := action.Data.(string)
 		result.success(handleInitClash(paramsString))

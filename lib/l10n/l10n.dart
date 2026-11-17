@@ -4563,6 +4563,216 @@ class AppLocalizations {
       args: [count],
     );
   }
+
+  /// `Enhanced hotspot sharing`
+  String get hotspotGateway {
+    return Intl.message(
+      'Enhanced hotspot sharing',
+      name: 'hotspotGateway',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enabled by default. Shares current rules and DNS when Internet Sharing and TUN are ready. IPv4 only; your switch choice is saved.`
+  String get hotspotGatewayDesc {
+    return Intl.message(
+      'Enabled by default. Shares current rules and DNS when Internet Sharing and TUN are ready. IPv4 only; your switch choice is saved.',
+      name: 'hotspotGatewayDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enabled · Gateway/DNS: {address}. Reconnect existing hotspot clients.`
+  String hotspotGatewayActive(Object address) {
+    return Intl.message(
+      'Enabled · Gateway/DNS: $address. Reconnect existing hotspot clients.',
+      name: 'hotspotGatewayActive',
+      desc: '',
+      args: [address],
+    );
+  }
+
+  /// `Waiting for the proxy and TUN. Sharing resumes automatically when ready.`
+  String get hotspotGatewayTunRequired {
+    return Intl.message(
+      'Waiting for the proxy and TUN. Sharing resumes automatically when ready.',
+      name: 'hotspotGatewayTunRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable Internet Sharing in macOS Settings first (USB/Ethernet to Wi-Fi). Clients use automatic IP and DNS; HTTP proxy stays off.`
+  String get hotspotGatewaySharingRequired {
+    return Intl.message(
+      'Enable Internet Sharing in macOS Settings first (USB/Ethernet to Wi-Fi). Clients use automatic IP and DNS; HTTP proxy stays off.',
+      name: 'hotspotGatewaySharingRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `TUN administrator authorization is required. Complete it when enabling TUN.`
+  String get hotspotGatewayPermissionRequired {
+    return Intl.message(
+      'TUN administrator authorization is required. Complete it when enabling TUN.',
+      name: 'hotspotGatewayPermissionRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not update hotspot sharing. Check the log for details.`
+  String get hotspotGatewayFailed {
+    return Intl.message(
+      'Could not update hotspot sharing. Check the log for details.',
+      name: 'hotspotGatewayFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bypass router mode`
+  String get softRouter {
+    return Intl.message(
+      'Bypass router mode',
+      name: 'softRouter',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enabled by default and follows the current LAN automatically. Set client gateway and DNS to this Mac’s IP addresses. IPv6 is used when both LAN and TUN support it; IPv6 client routes must also point to this Mac.`
+  String get softRouterDesc {
+    return Intl.message(
+      'Enabled by default and follows the current LAN automatically. Set client gateway and DNS to this Mac’s IP addresses. IPv6 is used when both LAN and TUN support it; IPv6 client routes must also point to this Mac.',
+      name: 'softRouterDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Mac LAN IPv4 address`
+  String get softRouterLANAddress {
+    return Intl.message(
+      'Mac LAN IPv4 address',
+      name: 'softRouterLANAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Client gateway and DNS IP addresses`
+  String get softRouterClientSettings {
+    return Intl.message(
+      'Client gateway and DNS IP addresses',
+      name: 'softRouterClientSettings',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `IPv4 gateway / DNS: {address}\nIPv6 gateway: {gateway6}\nIPv6 DNS: {dns6}`
+  String softRouterActive(Object address, Object gateway6, Object dns6) {
+    return Intl.message(
+      'IPv4 gateway / DNS: $address\nIPv6 gateway: $gateway6\nIPv6 DNS: $dns6',
+      name: 'softRouterActive',
+      desc: '',
+      args: [address, gateway6, dns6],
+    );
+  }
+
+  /// `Waiting for the proxy and TUN. Bypass routing resumes automatically when ready.`
+  String get softRouterTunRequired {
+    return Intl.message(
+      'Waiting for the proxy and TUN. Bypass routing resumes automatically when ready.',
+      name: 'softRouterTunRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enable IPv6 and DNS IPv6 resolution in FlClash. TUN must have an IPv6 address before dual-stack routing can start.`
+  String get softRouterIPv6Required {
+    return Intl.message(
+      'Enable IPv6 and DNS IPv6 resolution in FlClash. TUN must have an IPv6 address before dual-stack routing can start.',
+      name: 'softRouterIPv6Required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Select an active private LAN IPv4 address on Wi-Fi or Ethernet.`
+  String get softRouterLANRequired {
+    return Intl.message(
+      'Select an active private LAN IPv4 address on Wi-Fi or Ethernet.',
+      name: 'softRouterLANRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The selected LAN interface also needs a usable IPv6 address and prefix.`
+  String get softRouterLANIPv6Required {
+    return Intl.message(
+      'The selected LAN interface also needs a usable IPv6 address and prefix.',
+      name: 'softRouterLANIPv6Required',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Turn off bypass router mode before selecting a different LAN IP address.`
+  String get softRouterDisableBeforeChanging {
+    return Intl.message(
+      'Turn off bypass router mode before selecting a different LAN IP address.',
+      name: 'softRouterDisableBeforeChanging',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not start bypass router DNS. Check the selected IP address and whether its DNS port is in use.`
+  String get softRouterDNSFailed {
+    return Intl.message(
+      'Could not start bypass router DNS. Check the selected IP address and whether its DNS port is in use.',
+      name: 'softRouterDNSFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not update bypass router mode. Check the log for details.`
+  String get softRouterFailed {
+    return Intl.message(
+      'Could not update bypass router mode. Check the log for details.',
+      name: 'softRouterFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Automatic (follow current network)`
+  String get bypassRouterAutoAddress {
+    return Intl.message(
+      'Automatic (follow current network)',
+      name: 'bypassRouterAutoAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `IPv4 gateway / DNS: {address}\nIPv6: waiting for usable LAN and TUN IPv6 addresses`
+  String bypassRouterIPv4Active(Object address) {
+    return Intl.message(
+      'IPv4 gateway / DNS: $address\nIPv6: waiting for usable LAN and TUN IPv6 addresses',
+      name: 'bypassRouterIPv4Active',
+      desc: '',
+      args: [address],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<AppLocalizations> {

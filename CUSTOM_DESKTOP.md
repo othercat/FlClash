@@ -1,7 +1,8 @@
-# FlClash 0.8.94 · othercat YAML 定制版 4
+# FlClash 0.8.94 · othercat 桌面定制版
 
 基于官方 `v0.8.94`（`7e7f1f89f363c31bbb7aa5af3f34a8b5c32a7a19`），
-应用内部构建号为 `2026111504`。目标为 Apple Silicon macOS，以及 Windows 10/11 x64。
+最新 Mac 构建号为 `2026111702`，Windows 便携包仍为 `2026111504`。
+目标为 Apple Silicon macOS，以及 Windows 10/11 x64。
 保留上游的系统要求及安装方式；Windows ARM64 不在本次构建范围内。
 
 本版保留从配置到内核的字段传递修复：`tun.auto-detect-interface: false` 在读取、
@@ -16,7 +17,7 @@ IPv6 没有上游路由的情况另行记录，不以一次 IPv4 成功推断所
 同时修复全量 TUN 与其他 VPN 的出口选择：开启自动识别时，先查询目标地址的系统路由，
 识别系统动态下发的 VPN 路由；发现出口仍为本应用 TUN 时，继续使用上游的物理出口
 回退和防回环检查。macOS 使用原生路由套接字，Windows 使用 `GetBestInterfaceEx`。
-无需固定网卡名，不改动核心子模块，也不替换显式指定的节点出口网卡。
+该出口识别修复位于桌面桥接层，无需固定网卡名，也不替换显式指定的节点出口网卡。
 
 全量 TUN 应保留 `tun.auto-detect-interface: true`，配合 `route-exclude-address`、
 DNS 和 DIRECT 规则提供 VPN 兼容。`false` 仍按 YAML 生效，但它关闭了自动绑定出口；
@@ -107,3 +108,35 @@ Windows x64 助手可用 `GOOS=windows GOARCH=amd64 CGO_ENABLED=0 go build -trim
 在构建 Mac 上执行 `dart tool/package_fishport.dart --help` 查看参数。
 指定 `--platform`、`--app`、`--runtime` 和新的 `--out` ZIP 路径。
 打包器在临时目录里装配应用副本，交付 ZIP 仅含客户端及其运行组件。
+
+## Mac 增强热点共享与旁路由
+
+`2026111702` 提供两个独立的网络设置项，均默认开启；用户手动关闭的选择会保存。
+条件未就绪时显示等待，节点切换、监听重新开启和核心重新连接会保留共享意图。
+
+- **增强热点共享**：在 macOS 互联网共享和 FlClash TUN 就绪后，接入 Mac 热点的
+  客户端可使用自动获得的网关与 DNS，沿用 FlClash 的节点和分流，无需填写 HTTP 代理。
+- **旁路由模式**：自动识别当前私有局域网，也可选择本机地址。同一局域网的客户端
+  将网关和 DNS 设置为页面显示的 Mac IP 地址即可使用；不要求开启 macOS 互联网共享。
+  IPv4 可独立工作；局域网、TUN 和 DNS 均具备 IPv6 条件时提供 IPv6。客户端的 IPv6
+  默认网关也必须指向 Mac，仅修改 IPv4 网关不会接管另一个路由器提供的 IPv6 路径。
+
+两种模式复用原生核心，不依赖 Python 或额外开机服务，不接管路由器 DHCP/RA。
+仅维护自身 PF anchors，保留 aTrust 规则和主机流量排除。运行时保持五秒恢复周期，
+等待条件时降为六十秒检查；缓存共享配置与桥接信息并读取原生 PF/路由状态，减少
+稳定状态的外部命令。自动测速只合并同节点、同测试契约下仍在进行的请求，不缓存
+完成结果；手动测速及动态代理组保持独立，测速间隔和 lazy 设置不变。
+
+核心子模块固定到 `othercat/Clash.Meta` 的已发布提交，集成分支为 `FlClash-custom`。
+该分支保留本版实际验证的上游基线，不自动跟随其他上游分支。首次获取源码使用：
+
+```sh
+git clone --recurse-submodules https://github.com/othercat/FlClash.git
+```
+
+当前源码与 `2026111702` 已验证的 65 个改动文件摘要一致；447 项 Flutter 测试、
+原生核心测试及共享/测速竞态检查通过。Mac 热点网页、用户切换到可用节点后的 App Store
+更新及两种模式的 DNS 后端检查通过。新版 aTrust 连接共存/退出恢复、真实旁路由客户端、
+IPv6 端到端及其他实体设备仍待验收，不能由编译或本机 DNS 检查推断通过。
+Windows 包尚不包含本轮 Mac 网关功能。进展见 [#2](https://github.com/othercat/FlClash/issues/2)
+和 [#3](https://github.com/othercat/FlClash/issues/3)，两项保持开放。

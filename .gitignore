@@ -81,3 +81,4 @@ devtools_options.yaml
 # Local delivery artifacts
 /delivery-root/
 fishport-pass.txt
+/issues

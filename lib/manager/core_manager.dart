@@ -32,6 +32,21 @@ class _CoreContainerState extends ConsumerState<CoreManager>
   void initState() {
     super.initState();
     coreEventManager.addListener(this);
+    ref.listenManual(
+      networkSettingProvider.select(
+        (settings) => (
+          settings.hotspotGateway,
+          settings.bypassRouter,
+          settings.bypassRouterAddress,
+        ),
+      ),
+      (_, _) {
+        unawaited(
+          coreController.configureGateways(ref.read(networkSettingProvider)),
+        );
+      },
+      fireImmediately: true,
+    );
     ref.listenManual(currentProfileIdProvider, (prev, next) {
       if (prev != next) {
         WidgetsBinding.instance.addPostFrameCallback((_) {

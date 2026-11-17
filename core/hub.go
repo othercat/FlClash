@@ -50,15 +50,25 @@ func handleInitClash(paramsString string) bool {
 }
 
 func handleStartListener() bool {
-	runLock.Lock()
-	defer runLock.Unlock()
-	isRunning = true
-	updateListeners()
-	resolver.ResetConnection()
+	gatewayLifecycleMu.Lock()
+	defer gatewayLifecycleMu.Unlock()
+	func() {
+		runLock.Lock()
+		defer runLock.Unlock()
+		isRunning = true
+		updateListeners()
+		resolver.ResetConnection()
+	}()
+	hotspotGateway.Resume()
+	softRouterGateway.Resume()
 	return true
 }
 
 func handleStopListener() bool {
+	gatewayLifecycleMu.Lock()
+	defer gatewayLifecycleMu.Unlock()
+	softRouterGateway.Suspend()
+	hotspotGateway.Suspend()
 	runLock.Lock()
 	defer runLock.Unlock()
 	isRunning = false
@@ -80,6 +90,8 @@ func handleForceGC() {
 }
 
 func handleShutdown() bool {
+	softRouterGateway.Close()
+	hotspotGateway.Close()
 	stopListeners()
 	executor.Shutdown()
 	handleForceGC()

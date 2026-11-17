@@ -5,7 +5,17 @@ import 'package:fl_clash/common/common.dart';
 import 'package:fl_clash/enum/enum.dart';
 import 'package:fl_clash/models/models.dart';
 
+import 'hotspot.dart';
+import 'soft_router.dart';
+
 mixin CoreInterface {
+  Future<SoftRouterStatus> getSoftRouter();
+
+  Future<SoftRouterStatus> setSoftRouter(bool enabled, String address);
+  Future<HotspotGatewayStatus> getHotspotGateway();
+
+  Future<HotspotGatewayStatus> setHotspotGateway(bool enabled);
+
   Future<bool> init(InitParams params);
 
   Future<String> preload();
@@ -111,6 +121,48 @@ abstract class CoreHandlerInterface with CoreInterface {
     dynamic data,
     Duration? timeout,
   });
+
+  @override
+  Future<HotspotGatewayStatus> getHotspotGateway() async {
+    final data = await _invoke<Map<String, dynamic>>(
+      method: ActionMethod.getHotspotGateway,
+    );
+    if (data == null || data['enabled'] is! bool) {
+      throw StateError('Hotspot status unavailable');
+    }
+    return HotspotGatewayStatus.fromJson(data);
+  }
+
+  @override
+  Future<SoftRouterStatus> getSoftRouter() async {
+    final data = await _invoke<Map<String, dynamic>>(
+      method: ActionMethod.getSoftRouter,
+    );
+    if (data == null || data['enabled'] is! bool) {
+      throw StateError('Bypass router status unavailable');
+    }
+    return SoftRouterStatus.fromJson(data);
+  }
+
+  @override
+  Future<SoftRouterStatus> setSoftRouter(bool enabled, String address) async {
+    final data = await _invoke<Map<String, dynamic>>(
+      method: ActionMethod.setSoftRouter,
+      data: {'enabled': enabled, 'address': address},
+      timeout: const Duration(seconds: 30),
+    );
+    return SoftRouterStatus.fromJson(data ?? {'error': 'unavailable'});
+  }
+
+  @override
+  Future<HotspotGatewayStatus> setHotspotGateway(bool enabled) async {
+    final data = await _invoke<Map<String, dynamic>>(
+      method: ActionMethod.setHotspotGateway,
+      data: enabled,
+      timeout: const Duration(seconds: 30),
+    );
+    return HotspotGatewayStatus.fromJson(data ?? {'error': 'unavailable'});
+  }
 
   Future<T> parasResult<T>(ActionResult result) async {
     return switch (result.method) {

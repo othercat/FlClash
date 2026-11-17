@@ -223,6 +223,12 @@ void main() {
       expect(props.routeMode, RouteMode.config);
       expect(props.autoSetSystemDns, true);
       expect(props.appendSystemDns, false);
+      expect(props.hotspotGateway, true);
+      expect(props.bypassRouter, true);
+      expect(props.bypassRouterAddress, isEmpty);
+      final migrated = NetworkProps.fromJson({'systemProxy': false});
+      expect(migrated.hotspotGateway, true);
+      expect(migrated.bypassRouter, true);
     });
 
     test('round-trip with custom values', () {
@@ -230,11 +236,17 @@ void main() {
         systemProxy: false,
         bypassDomain: ['example.com'],
         routeMode: RouteMode.bypassPrivate,
+        hotspotGateway: false,
+        bypassRouter: false,
+        bypassRouterAddress: '192.168.0.221',
       );
       final restored = roundTrip(() => props.toJson(), NetworkProps.fromJson);
       expect(restored.systemProxy, false);
       expect(restored.bypassDomain, ['example.com']);
       expect(restored.routeMode, RouteMode.bypassPrivate);
+      expect(restored.hotspotGateway, false);
+      expect(restored.bypassRouter, false);
+      expect(restored.bypassRouterAddress, '192.168.0.221');
     });
   });
 
